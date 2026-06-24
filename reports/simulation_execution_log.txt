@@ -1,0 +1,102 @@
+(venv) debayanthakur@Debayans-MacBook-Air motorcycle-safety % python src/main.py
+[DETECTOR] Initializing LSTM Verification Engine with Guard Threshold: 0.998
+[DETECTOR] Calibrating StandardScaler on training reference baseline features...
+[DETECTOR] Scaler coefficients successfully cached into memory.
+[DIGITAL TWIN] Active Virtual Kinematic Twin instantiated. Buffer capacity: 50 frames.
+
+Executing Operational Non-Crash Anomaly Rejection Simulation Profile...
+
+=================================================================
+🏍️  STARTING DIGITAL TWIN EXPERIMENTAL playback: Pothole_5_Out.csv
+=================================================================
+[Time: 0.03s] Twin Sync Verified | Crash Probability: 0.4712 | Health: SECURE
+[Time: 0.05s] Twin Sync Verified | Crash Probability: 0.4722 | Health: SECURE
+[Time: 0.08s] Twin Sync Verified | Crash Probability: 0.4733 | Health: SECURE
+[Time: 0.10s] Twin Sync Verified | Crash Probability: 0.9782 | Health: SECURE
+[Time: 0.12s] Twin Sync Verified | Crash Probability: 0.7110 | Health: SECURE
+[Time: 0.15s] Twin Sync Verified | Crash Probability: 0.9005 | Health: SECURE
+[Time: 0.17s] Twin Sync Verified | Crash Probability: 0.9387 | Health: SECURE
+[Time: 0.20s] Twin Sync Verified | Crash Probability: 0.9913 | Health: SECURE
+[Time: 0.22s] Twin Sync Verified | Crash Probability: 0.8897 | Health: SECURE
+[Time: 0.25s] Twin Sync Verified | Crash Probability: 0.6476 | Health: SECURE
+[Time: 0.28s] Twin Sync Verified | Crash Probability: 0.8476 | Health: SECURE
+[Time: 0.30s] Twin Sync Verified | Crash Probability: 0.9320 | Health: SECURE
+[Time: 0.32s] Twin Sync Verified | Crash Probability: 0.7094 | Health: SECURE
+[Time: 0.35s] Twin Sync Verified | Crash Probability: 0.4645 | Health: SECURE
+[Time: 0.38s] Twin Sync Verified | Crash Probability: 0.9201 | Health: SECURE
+[Time: 0.40s] Twin Sync Verified | Crash Probability: 0.5535 | Health: SECURE
+[Time: 0.43s] Twin Sync Verified | Crash Probability: 0.7835 | Health: SECURE
+[Time: 0.45s] Twin Sync Verified | Crash Probability: 0.6685 | Health: SECURE
+[Time: 0.47s] Twin Sync Verified | Crash Probability: 0.8598 | Health: SECURE
+[Time: 0.50s] Twin Sync Verified | Crash Probability: 0.3030 | Health: SECURE
+[Time: 0.52s] Twin Sync Verified | Crash Probability: 0.7585 | Health: SECURE
+[Time: 0.55s] Twin Sync Verified | Crash Probability: 0.8017 | Health: SECURE
+[Time: 0.57s] Twin Sync Verified | Crash Probability: 0.4771 | Health: SECURE
+[Time: 0.60s] Twin Sync Verified | Crash Probability: 0.9483 | Health: SECURE
+[Time: 0.62s] Twin Sync Verified | Crash Probability: 0.8284 | Health: SECURE
+[Time: 0.65s] Twin Sync Verified | Crash Probability: 0.5252 | Health: SECURE
+[Time: 0.68s] Twin Sync Verified | Crash Probability: 0.5777 | Health: SECURE
+[Time: 0.70s] Twin Sync Verified | Crash Probability: 0.3561 | Health: SECURE
+[Time: 0.73s] Twin Sync Verified | Crash Probability: 0.7601 | Health: SECURE
+[Time: 0.75s] Twin Sync Verified | Crash Probability: 0.8310 | Health: SECURE
+[Time: 0.77s] Twin Sync Verified | Crash Probability: 0.3724 | Health: SECURE
+[Time: 0.80s] Twin Sync Verified | Crash Probability: 0.6209 | Health: SECURE
+[Time: 0.82s] Twin Sync Verified | Crash Probability: 0.8867 | Health: SECURE
+[Time: 0.85s] Twin Sync Verified | Crash Probability: 0.8700 | Health: SECURE
+[Time: 0.88s] Twin Sync Verified | Crash Probability: 0.8751 | Health: SECURE
+[Time: 0.90s] Twin Sync Verified | Crash Probability: 0.8121 | Health: SECURE
+[Time: 0.93s] Twin Sync Verified | Crash Probability: 0.6727 | Health: SECURE
+[Time: 0.95s] Twin Sync Verified | Crash Probability: 0.7895 | Health: SECURE
+[Time: 0.98s] Twin Sync Verified | Crash Probability: 0.7260 | Health: SECURE
+[Time: 1.00s] Twin Sync Verified | Crash Probability: 0.8784 | Health: SECURE
+[Time: 1.02s] Twin Sync Verified | Crash Probability: 0.8505 | Health: SECURE
+[Time: 1.05s] Twin Sync Verified | Crash Probability: 0.8474 | Health: SECURE
+[Time: 1.08s] Twin Sync Verified | Crash Probability: 0.8721 | Health: SECURE
+[Time: 1.10s] Twin Sync Verified | Crash Probability: 0.4163 | Health: SECURE
+[Time: 1.12s] Twin Sync Verified | Crash Probability: 0.9069 | Health: SECURE
+[Time: 1.15s] Twin Sync Verified | Crash Probability: 0.8899 | Health: SECURE
+[Time: 1.17s] Twin Sync Verified | Crash Probability: 0.8312 | Health: SECURE
+[Time: 1.20s] Twin Sync Verified | Crash Probability: 0.7025 | Health: SECURE
+[Time: 1.23s] Twin Sync Verified | Crash Probability: 0.6363 | Health: SECURE
+[Time: 1.25s] Twin Sync Verified | Crash Probability: 0.6174 | Health: SECURE
+[Time: 1.27s] Twin Sync Verified | Crash Probability: 0.9484 | Health: SECURE
+[Time: 1.30s] Twin Sync Verified | Crash Probability: 0.7797 | Health: SECURE
+[Time: 1.33s] Twin Sync Verified | Crash Probability: 0.5137 | Health: SECURE
+[Time: 1.35s] Twin Sync Verified | Crash Probability: 0.4880 | Health: SECURE
+[Time: 1.38s] Twin Sync Verified | Crash Probability: 0.8124 | Health: SECURE
+[Time: 1.40s] Twin Sync Verified | Crash Probability: 0.7091 | Health: SECURE
+[Time: 1.42s] Twin Sync Verified | Crash Probability: 0.7948 | Health: SECURE
+[Time: 1.45s] Twin Sync Verified | Crash Probability: 0.8316 | Health: SECURE
+[Time: 1.48s] Twin Sync Verified | Crash Probability: 0.6213 | Health: SECURE
+[Time: 1.50s] Twin Sync Verified | Crash Probability: 0.8732 | Health: SECURE
+[Time: 1.52s] Twin Sync Verified | Crash Probability: 0.9099 | Health: SECURE
+[Time: 1.55s] Twin Sync Verified | Crash Probability: 0.6977 | Health: SECURE
+[Time: 1.58s] Twin Sync Verified | Crash Probability: 0.8279 | Health: SECURE
+[Time: 1.60s] Twin Sync Verified | Crash Probability: 0.2874 | Health: SECURE
+[Time: 1.62s] Twin Sync Verified | Crash Probability: 0.7024 | Health: SECURE
+[Time: 1.65s] Twin Sync Verified | Crash Probability: 0.8926 | Health: SECURE
+[Time: 1.67s] Twin Sync Verified | Crash Probability: 0.9159 | Health: SECURE
+[Time: 1.70s] Twin Sync Verified | Crash Probability: 0.9378 | Health: SECURE
+[Time: 1.73s] Twin Sync Verified | Crash Probability: 0.7003 | Health: SECURE
+[Time: 1.75s] Twin Sync Verified | Crash Probability: 0.6405 | Health: SECURE
+[Time: 1.77s] Twin Sync Verified | Crash Probability: 0.8325 | Health: SECURE
+[Time: 1.80s] Twin Sync Verified | Crash Probability: 0.8360 | Health: SECURE
+[Time: 1.83s] Twin Sync Verified | Crash Probability: 0.9403 | Health: SECURE
+[Time: 1.85s] Twin Sync Verified | Crash Probability: 0.7090 | Health: SECURE
+[Time: 1.88s] Twin Sync Verified | Crash Probability: 0.7410 | Health: SECURE
+[Time: 1.90s] Twin Sync Verified | Crash Probability: 0.8394 | Health: SECURE
+[Time: 1.92s] Twin Sync Verified | Crash Probability: 0.9161 | Health: SECURE
+[Time: 1.95s] Twin Sync Verified | Crash Probability: 0.7993 | Health: SECURE
+
+🏁 SEQUENCE CONCLUDED. The Kinematic Digital Twin successfully rejected the anomaly. Zero False Alarms triggered.
+[DIGITAL TWIN] Active Virtual Kinematic Twin instantiated. Buffer capacity: 50 frames.
+
+Executing Critical Collision Sequence Verification Simulation Profile...
+
+=================================================================
+🏍️  STARTING DIGITAL TWIN EXPERIMENTAL playback: ISO13232-1_Out.csv
+=================================================================
+
+ [HARDWARE SYSTEM INTERRUPT] ACCIDENT VERIFIED BY KINEMATIC TWIN STATE AT 0.02s!
+ Exceeded F2 Safety Frontier Threshold: 0.9999 >= 0.998
+ [ALERT PIPELINE] Activating SIM800L Cellular System & Telemetry Broadcast...

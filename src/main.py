@@ -1,141 +1,102 @@
 import os
 import sys
 import time
+import numpy as np
+import pandas as pd
 
-# Resolve directory paths for package structure robustness
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+# Enforce secure package mapping boundaries 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if BASE_DIR not in sys.path:
+    sys.path.append(BASE_DIR)
 
-from src.alerts import send_alert
-from src.detector import CrashDetector
-from src.simulator import MotorcycleSimulator
-from src.twin import DigitalTwin
+from src.detector import LSTMVerificationEngine
+from src.twin import KinematicDigitalTwin
 
+# Runtime Paths Configuration
+DATA_DIR = os.path.join(BASE_DIR, "data", "raw")
+TRAIN_PATH = os.path.join(DATA_DIR, "trainingData.csv")
+SCENARIO_DIR = os.path.join(DATA_DIR, "ControlScenarios")
+MODEL_PATH = os.path.join(BASE_DIR, "src", "paper_model_lstm.keras")
 
-def run_scenario(
-    name: str,
-    simulator: MotorcycleSimulator,
-    twin: DigitalTwin,
-    detector: CrashDetector,
-    steps: int,
-    target_state: str,
-) -> bool:
-    """Executes a defined simulation phase, running data through the digital twin
+# Strict Feature Ordering Template
+FEATURES = [
+    'MotoBody_angaccY', 'MotoBody_angvelY', 'MotoBody_linaccX', 'MotoBody_linaccZ',
+    'MotoFW_linaccX', 'MotoFW_linaccZ', 'MotoRW_linaccX', 'MotoRW_linaccZ',
+    'FW_cnt_Force', 'RW_cnt_Force', 'angveldiff', 'angaccdiff', 'sensorLeft', 'sensorRight'
+]
 
-    and crash detection system.
-    """
-    print(f"\n>>> Starting Phase: {name.upper()} (Target: {target_state}) <<<")
-    simulator.set_state(target_state)
-    alert_fired = False
+def execute_software_in_the_loop_simulation(scenario_filename: str, twin: KinematicDigitalTwin, engine: LSTMVerificationEngine):
+    path = os.path.join(SCENARIO_DIR, scenario_filename)
+    if not os.path.exists(path):
+        print(f"[SIMULATION CRITICAL ERROR] Target file {scenario_filename} absent at location: {path}")
+        return
 
-    for step in range(1, steps + 1):
-        # 1. Capture sensor stream
-        telemetry = simulator.step()
+    print("\n" + "="*65)
+    print(f"🏍️  STARTING DIGITAL TWIN EXPERIMENTAL playback: {scenario_filename}")
+    print("="*65)
 
-        # 2. Update virtual representation (Digital Twin)
-        twin.update(telemetry)
+    df = pd.read_csv(path)
+    # Structural features extraction
+    df['angveldiff'] = df.FW_angvel_Y - df.RW_angvel_Y
+    df['angaccdiff'] = df.FW_angacc_Y - df.RW_angacc_Y
+    df['sensorLeft'] = np.logical_or(df.SwitchSidesensor_left_road, df.SwitchSidesensor_left_car).astype(int)
+    df['sensorRight'] = np.logical_or(df.SwitchSidesensor_right_road, df.SwitchSidesensor_right_car).astype(int)
+    df['FW_cnt_Force'] = df.FW_Car_cnt_force + df.FW_Road_cnt_force
+    df['RW_cnt_Force'] = df.RW_Car_cnt_force + df.RW_Road_cnt_force
 
-        # 3. Analyze rolling telemetry history window
-        history = twin.get_history()
-        analysis = detector.analyze(history)
+    crash_triggered = False
 
-        # Retrieve current metrics from twin for standard logging
-        latest = twin.get_latest_state()
-        speed = latest.get("speed_kmh", 0.0)
-        roll = abs(latest.get("estimated_roll", 0.0))
-        g_force = latest.get("accel_mag_g", 1.0)
-        classification = analysis["classification"]
+    for idx, row in df.iterrows():
+        raw_reading = row[FEATURES].values
+        
+        # Step A: Normalize incoming vector via our verification calibration wrapper
+        scaled_reading = engine.scale_reading(raw_reading)
+        
+        # Step B: Push the standardized state vector directly to update the Virtual Twin replica
+        twin.update_state(scaled_reading)
+        
+        # Step C: Evaluate if twin possesses complete chronological depth
+        if twin.is_synchronized():
+            twin_matrix = twin.get_current_twin_matrix()
+            is_crash, probability = engine.verify_state_sequence(twin_matrix)
+            
+            if idx % 50 == 0:
+                print(f"[Time: {row['Time']:.2f}s] Twin Sync Verified | Crash Probability: {probability:.4f} | Health: SECURE")
+            
+            if is_crash:
+                print(f"\n [HARDWARE SYSTEM INTERRUPT] ACCIDENT VERIFIED BY KINEMATIC TWIN STATE AT {row['Time']:.2f}s!")
+                print(f" Exceeded F2 Safety Frontier Threshold: {probability:.4f} >= {engine.threshold}")
+                print(f" [ALERT PIPELINE] Activating SIM800L Cellular System & Telemetry Broadcast...")
+                crash_triggered = True
+                break
+                
+        # Simulate physical processing period latency of edge hardware clocks (~50Hz sampling)
+        time.sleep(0.002)
 
-        print(
-            f"Step {step:02d} | State: {telemetry['state']:8s} | "
-            f"Speed: {speed:5.1f} km/h | Roll: {roll:5.1f}° | "
-            f"Impact: {g_force:5.2f}G | Result: {classification.upper()}"
-        )
-
-        # 4. Trigger SOS Alert block
-        if analysis["is_crash_detected"]:
-            location = {
-                "latitude": latest.get("latitude", 0.0),
-                "longitude": latest.get("longitude", 0.0),
-            }
-            # Trigger our modular alerting routine
-            alert_fired = send_alert(
-                message=analysis["reason"],
-                location=location,
-                severity="CRITICAL",
-            )
-            # Stop scenario early on verified crash to prevent duplicate SOS broadcasts
-            break
-
-        time.sleep(0.05)  # Speeds up local simulation output
-
-    return alert_fired
-
+    if not crash_triggered:
+        print(f"\n🏁 SEQUENCE CONCLUDED. The Kinematic Digital Twin successfully rejected the anomaly. Zero False Alarms triggered.")
 
 def main():
-    print("=" * 70)
-    print("DIGITAL TWIN-BASED MOTORCYCLE SAFETY SYSTEM - CLI SIMULATOR RUN")
-    print("=" * 70)
+    if not os.path.exists(MODEL_PATH):
+        print(f"[SIMULATION CRITICAL ERROR] Trained LSTM weight artifact not found at {MODEL_PATH}.")
+        return
 
-    # Initialize modular components
-    simulator = MotorcycleSimulator()
-    twin = DigitalTwin(max_size=30)  # 3 seconds history buffer at 10Hz
-    detector = CrashDetector(
-        impact_threshold_g=3.5,
-        tilt_threshold_deg=55.0,
-        post_impact_window_samples=8,
-    )
-
-    # Execute structured testing sequence to verify robustness against false positives
-    # 1. Normal Highway Riding
-    run_scenario(
-        "Normal Highway Cruising",
-        simulator,
-        twin,
-        detector,
-        steps=8,
-        target_state="normal",
-    )
-
-    # 2. Heavy Road Imperfection / Pothole Impact (Transient Anomaly)
-    run_scenario(
-        "Severe Pothole Transient",
-        simulator,
-        twin,
-        detector,
-        steps=5,
-        target_state="pothole",
-    )
-
-    # 3. Aggressive Braking (Normal vehicle control deceleration)
-    run_scenario(
-        "Emergency Hard Braking",
-        simulator,
-        twin,
-        detector,
-        steps=6,
-        target_state="braking",
-    )
-
-    # 4. Uncontrolled Crash Event
-    crash_detected = run_scenario(
-        "High-Side Crash Sequence",
-        simulator,
-        twin,
-        detector,
-        steps=12,
-        target_state="crash",
-    )
-
-    # Output analytical result
-    print("=" * 70)
-    print("SIMULATION SEQUENCE TERMINATED")
-    print("=" * 70)
-    if crash_detected:
-        print("Success: System successfully intercepted and verified crash.")
-        print("Success: Potholes and hard braking correctly filtered (No false alerts).")
-    else:
-        print("Error: Failure to process/verify target emergency profile.")
-
+    # Clean independent instantiation
+    engine = LSTMVerificationEngine(MODEL_PATH, TRAIN_PATH, FEATURES)
+    
+    # Session 1: Run operational road challenge anomaly (Pothole test file)
+    twin_session_one = KinematicDigitalTwin(window_size=50)
+    print("\nExecuting Operational Non-Crash Anomaly Rejection Simulation Profile...")
+    time.sleep(1)
+    # Testing against Pothole scenario
+    pothole_csv = "Pothole_5_Out.csv" if os.path.exists(os.path.join(SCENARIO_DIR, "Pothole_5_Out.csv")) else "Pothole_5_Out.csv"
+    execute_software_in_the_loop_simulation(pothole_csv, twin_session_one, engine)
+    
+    # Session 2: Run collision sequence challenge (ISO Crash test file)
+    twin_session_two = KinematicDigitalTwin(window_size=50)
+    print("\nExecuting Critical Collision Sequence Verification Simulation Profile...")
+    time.sleep(1)
+    execute_software_in_the_loop_simulation("ISO13232-1_Out.csv", twin_session_two, engine)
 
 if __name__ == "__main__":
     main()
