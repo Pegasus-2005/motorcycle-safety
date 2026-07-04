@@ -4,3 +4,19 @@ __pycache__/
 .env
 *.csv
 *.csv
+# Python environment
+.venv/
+__pycache__/
+
+# Datasets (Do not push these!)
+data/
+reports/
+publication_vault/phase_1_simulation_14_feature/models/*.keras
+publication_vault/phase_2_physical_6_feature/models/*.keras
+
+# OS specific
+.DS_Store
+
+# Temporary logs or checkpoints
+*.log
+*.tmp

@@ -1,4 +1,8 @@
 import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+import tensorflow as tf
+tf.config.set_visible_devices([], 'GPU')
+import os
 import json
 import numpy as np
 import pandas as pd
@@ -18,10 +22,15 @@ os.makedirs(MODEL_DIR, exist_ok=True)
 os.makedirs(REPORT_DIR, exist_ok=True)
 
 # Selected physical features ensuring no overfitting on irrelevant variables
-FEATURES = [
+"""FEATURES = [
     'MotoBody_angaccY', 'MotoBody_angvelY', 'MotoBody_linaccX', 'MotoBody_linaccZ',
     'MotoFW_linaccX', 'MotoFW_linaccZ', 'MotoRW_linaccX', 'MotoRW_linaccZ',
     'FW_cnt_Force', 'RW_cnt_Force', 'angveldiff', 'angaccdiff', 'sensorLeft', 'sensorRight'
+]"""
+# Selected physical features ensuring no overfitting on irrelevant variables
+FEATURES = [
+    'MotoBody_linaccX', 'MotoBody_linaccY', 'MotoBody_linaccZ',
+    'MotoBody_angvelX', 'MotoBody_angvelY', 'MotoBody_angvelZ'
 ]
 TARGET = 'CrashLabelML'
 WINDOW_SIZE = 50

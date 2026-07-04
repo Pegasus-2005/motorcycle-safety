@@ -138,6 +138,15 @@ features = [
     'CrashLabelML',
     'SwitchSidesensor_left_road'
 ]
+# list of all available features, comment out the ones you don't want to use
+"""features = [
+    'MotoBody_linaccX',
+    'MotoBody_linaccY',
+    'MotoBody_linaccZ',
+    'MotoBody_angvelX',
+    'MotoBody_angvelY',
+    'MotoBody_angvelZ'
+]"""
 
 
 # %% load raw data
@@ -148,7 +157,7 @@ data_train = pd.read_csv(os.path.join(datapath, 'trainingData.csv'))
 data_train['angveldiff'] = data_train.FW_angvel_Y - data_train.RW_angvel_Y
 data_train['angaccdiff'] = data_train.FW_angacc_Y - data_train.RW_angacc_Y
 data_train['sensorLeft'] = np.logical_or(data_train.SwitchSidesensor_left_road, data_train.SwitchSidesensor_left_car)
-data_train['sensorRight'] = np.logical_or(data_train.SwitchSidesensor_right_road, data_train.SwitchSidesensor_right_car)
+data_train['sensorRight'] = np.logical_or(data_train.SwitchSidesenor_right_road, data_train.SwitchSidesensor_right_car)
 data_train['FW_cnt_Force'] = data_train.FW_Car_cnt_force + data_train.FW_Road_cnt_force
 data_train['RW_cnt_Force'] = data_train.RW_Car_cnt_force + data_train.RW_Road_cnt_force
 
