@@ -33,7 +33,7 @@ def send_alert(
     # Build the output log structure
     border = "=" * 60
     log_msg = f"\n{border}\n"
-    log_msg += f"🚨 SYSTEM ALERT - [{severity.upper()}] | {timestamp}\n"
+    log_msg += f"SYSTEM ALERT - [{severity.upper()}] | {timestamp}\n"
     log_msg += f"Message: {message}\n"
 
     if location:
